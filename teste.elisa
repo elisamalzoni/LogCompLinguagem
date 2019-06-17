@@ -1,0 +1,61 @@
+Funcao fibonacci(n como inteiro) como inteiro
+    ' codigo do raphael costa
+    inicialize flag como booleano
+    
+    flag = falso
+    se n = 0 entao
+        fibonacci = 1
+        flag = verdadeiro
+    fim se
+
+    se n = 1 entao 
+        fibonacci = 1
+        flag = verdadeiro
+    fim se
+
+    se flag = falso entao
+        fibonacci = fibonacci(n-2) + fibonacci(n-1)
+    fim se
+
+fim Funcao
+
+Subrotina check(n como inteiro)
+    inicialize tres como inteiro
+    inicialize cinco como inteiro
+    inicialize flag como booleano
+    
+    tres = (n - (n / 3 * 3))
+    cinco = (n - (n / 5 * 5))
+    flag = verdadeiro
+
+    se (tres = 0) e (cinco = 0) entao
+        imprima 222
+        flag = falso
+    fim se
+
+    se (tres = 0) e (flag = verdadeiro) entao
+        imprima 333
+        flag = falso
+    fim se
+
+    se (cinco = 0) e (flag = verdadeiro) entao
+        imprima 555
+    fim se
+fim Subrotina
+
+Subrotina fizzBuzz()
+    ' adaptado da sabrina
+    inicialize n como inteiro
+
+    n = entrada
+
+    enquanto n > 0
+        Chame check(n)
+        n = n - 1     
+    enquantofim
+fim Subrotina
+
+Subrotina Main()
+    imprima fibonacci(5)
+    Chame fizzBuzz()
+fim Subrotina

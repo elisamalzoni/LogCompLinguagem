@@ -1,0 +1,16 @@
+Funcao dobra(n como inteiro) como inteiro
+    dobra = n*2
+fim Funcao
+
+Subrotina menorquinze(n como inteiro)
+    se n < 15 entao
+         imprima 1
+    senao
+         imprima 2
+    fim se
+fim Subrotina
+
+Subrotina Main()
+    imprima dobra(5)
+    Chame menorquinze(4)
+fim Subrotina
