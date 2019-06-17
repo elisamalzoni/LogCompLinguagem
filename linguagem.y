@@ -1,89 +1,96 @@
 %{
-  #include <stdio.h>
-  #include <math.h>
-  int yylex (void);
-  void yyerror (char const *);
+    extern int yylex();
+    void yyerror(const char *s) { printf("ERROR: %sn", s); }
 %}
 
+%token <string> TIDENTIFICADOR TINTEIRO TBOOLEANO
+%token <token> IGUAL MENOR MAIOR 
+%token <token> APAR FPAR VIRGULA
+%token <token> MAIS MENOS MUL DIV 
+%token <token> INTEIRO BOOLEANO IMPRIMA FIM 
+%token <token> NAO E OU 
+%token <token> ENQUANTO ENQUANTOFIM ENTAO SE SENAO ENTRADA INICIALIZE COMO SUBROTINA VERDADEIRO FALSO FUNCAO CHAME
+
+
+%start program
+
 %%
-function-definition : {declaration-specifier}* declarator {declaration}* compound-statement
-;
 
-declaration-specifier : type-specifier
-;
-        
-type-specifier : 
-    VOID
-    | INT
-    | FLOAT
+program : subdec | funcdec | program
+        ;
+b :
+  | TIDENTIFICADOR COMO type a
+  ;
 
-;
+a : 
+  | a
+  | VIRGULA TIDENTIFICADOR COMO type
+  ;
 
-conditional-expression: 
-    logical-or-expression
-    | logical-or-expression ? expression : conditional-expression
-;
+subdec : SUBROTINA TIDENTIFICADOR APAR b a FPAR statement FIM SUBROTINA
+       ;
 
-logical-or-expression : logical-and-expression
-                          | logical-or-expression || logical-and-expression
-;
+funcdec : FUNCAO TIDENTIFICADOR APAR b a FPAR COMO type statement FIM FUNCAO;
 
-logical-and-expression : inclusive-or-expression
-                           | logical-and-expression && inclusive-or-expression
-;
-and-expression : equality-expression
-                   | and-expression & equality-expression
-;
-equality-expression : equality-expression CEQUAL relational-expression
-                        | equality-expression NEQUAL relational-expression
-;
-additive-expression : multiplicative-expression
-                        | additive-expression PLUS multiplicative-expression
-                        | additive-expression MINUS multiplicative-expression
-;
-multiplicative-expression : cast-expression
-                              | multiplicative-expression MUL cast-expression
-                              | multiplicative-expression DIV cast-expression
-;
-cast-expression : unary-expression
-                    | OPARENT type-name CPARENT cast-expression
-;
-unary-expression :   | INC unary-expression
-                     | DEC unary-expression
-                     | unary-operator cast-expression
-;
+c :
+  | SENAO  statement
+  ;
 
-expression : assignment-expression
-               | expression , assignment-expression
-;
-assignment-expression : conditional-expression
-                          | unary-expression assignment-operator assignment-expression
-;
-assignment-operator : EQUAL
-                        | MULEQUAL
-                        | DIVEQUAL
-                        | PLUSEQUAL
-                        | MINUSEQUAL
-;
-unary-operator :  PLUS
-                    | MINUS
-;
-compound-statement : OBRACE {declaration}* {statement}* CBRACE
-;
-statement : labeled-statement
-              | expression-statement
-              | compound-statement
-              | selection-statement
-              | iteration-statement
-;
+d :
+  |VIRGULA relexp d
+  ;
 
-expression-statement : {expression}?;
-;
-selection-statement : se OPARENT expression CPARENT statement
-                        | se OPARENT expression CPARENT statement senao statement
-;
+ea :
+  | relexp d
+  ;
 
-iteration-statement : enquanto OPARENT expression CPARENT statement
-                        | para OPARENT {expression}? ; {expression}? ; {expression}? CPARENT statement
-;
+statement :
+          | statement
+          | TIDENTIFICADOR IGUAL relexp
+          | IMPRIMA relexp
+          | INICIALIZE TIDENTIFICADOR COMO type
+          | ENQUANTO relexp statement ENQUANTOFIM
+          | SE relexp ENTAO statement c FIM SE
+          | CHAME TIDENTIFICADOR APAR ea FPAR
+          ;
+
+
+type : INTEIRO | BOOLEANO
+     ;
+comp : IGUAL | MAIOR | MENOR;
+
+relexp : expression
+       | comp expression
+       ;
+
+mate : MAIS | MENOS | OU;
+
+expression : term
+           | term mate term
+           ;
+
+matema : MUL | DIV | E;
+
+term : factor 
+     | factor matema factor
+     ;
+
+bool : VERDADEIRO | FALSO;
+
+g : 
+  | APAR ea FPAR
+  ;
+
+j : MAIS | MENOS | NAO;
+
+h : APAR  relexp  FPAR;
+
+factor : INTEIRO 
+      | bool
+      | TIDENTIFICADOR g
+      | j factor
+      | h
+      | ENTRADA
+      ;
+
 %%
